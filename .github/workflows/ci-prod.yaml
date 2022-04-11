@@ -1,4 +1,3 @@
-
 name: CI Production
 
 on:
@@ -11,7 +10,7 @@ on:
       - completed
 
 env:
-  IMAGE_NAME: 'availability'
+  IMAGE_NAME: "availability"
 
 jobs:
   build-publish:
@@ -25,9 +24,11 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           GITREF=$(echo $GITHUB_SHA | sed 's/.*\(.........\)/\1/')
           echo GITREF=$GITREF
+          echo GH_REF=${{ github.ref }}
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           echo VERSION=$VERSION
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          echo VERSION=$VERSION
           [ "$VERSION" == "main" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
