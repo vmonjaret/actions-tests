@@ -1,0 +1,34 @@
+
+name: CI Production
+
+on:
+  workflow_run:
+    workflows:
+      - "release"
+    branches:
+      - "main"
+    type:
+      - completed
+
+env:
+  IMAGE_NAME: 'availability'
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push images
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          GITREF=$(echo $GITHUB_SHA | sed 's/.*\(.........\)/\1/')
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          [ "$VERSION" == "main" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$GITREF
+          docker push $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$GITREF
