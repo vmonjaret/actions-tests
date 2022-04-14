@@ -29,6 +29,9 @@ jobs:
           VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
+      - name: Get service name
+        id: service-name
+        run: INPUT=$(echo ${{ github.repository }} | sed -e 's/vmonjaret\/\b\(.\)/\u\1/') echo "::set-output name=service-name::${INPUT,,}"
       - name: Get Package.json version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
@@ -37,7 +40,8 @@ jobs:
         env:
           SLACK_COLOR: ${{ job.status }}
           SLACK_FOOTER: ""
-          SLACK_TITLE: ${{ github.repository }} ${{ steps.package-version.outputs.current-version}} is deployed to staging 🚀
+          SLACK_TITLE: ${{ steps.service-name.outputs.service-name}}
+          SLACK_MESSAGE: Deployed ${{ steps.package-version.outputs.current-version}} to staging 🚀
           SLACK_USERNAME: "Product Release Bot"
           SLACK_WEBHOOK: "${{ secrets.SLACK_NOTIFICATION }}"
           MSG_MINIMAL: true
