@@ -39,5 +39,5 @@ jobs:
           SLACK_FOOTER: ""
           SLACK_TITLE: ${{ github.repository }} ${{ steps.package-version.outputs.current-version}} is deployed to staging 🚀
           SLACK_USERNAME: "Product Release Bot"
-          SLACK_WEBHOOK: "https://hooks.slack.com/services/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"
+          SLACK_WEBHOOK: "${{ secrets.SLACK_NOTIFICATION }}"
           MSG_MINIMAL: true
