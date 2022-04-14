@@ -29,3 +29,15 @@ jobs:
           VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
+      - name: Get Package.json version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: Notify On Slack for staging
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_FOOTER: ""
+          SLACK_TITLE: ${{ github.repository }} ${{ steps.package-version.outputs.current-version}} is deployed to staging 🚀
+          SLACK_USERNAME: "Product Release Bot"
+          SLACK_WEBHOOK: "https://hooks.slack.com/services/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"
+          MSG_MINIMAL: true
