@@ -13,14 +13,6 @@ env:
   IMAGE_NAME: "availability"
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
-    outputs:
-      service-name: ${{ steps.service-name.outputs.service-name }}
-    steps:
-      - name: Get service name
-        id: service-name
-        run: echo "::set-output name=service-name::$(echo ${{ github.repository }} | sed -e 's/vmonjaret\/\b\(.\)/\u\1/')"
   build-publish:
     needs: build
     runs-on: ubuntu-latest
@@ -31,7 +23,6 @@ jobs:
         run: git fetch --prune --unshallow
       - name: Push images
         run: |
-          IMAGE_NAME=${{ steps.service-name.outputs.service-name }}
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           GITREF=$(echo $GITHUB_SHA | sed 's/.*\(.........\)/\1/')
@@ -43,12 +34,15 @@ jobs:
       - name: Get Package.json version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
+      - name: Get service name
+        id: service-name
+        run: echo "::set-output name=service-name::$(echo ${IMAGE_NAME^})"
       - name: Notify On Slack for staging
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_COLOR: ${{ job.status }}
           SLACK_FOOTER: ""
-          SLACK_TITLE: ${{ needs.build.outputs.service-name }}
+          SLACK_TITLE: ${{ steps.service-name.outputs.service-name }}
           SLACK_MESSAGE: Deployed ${{ steps.package-version.outputs.current-version}} to staging 🚀
           SLACK_USERNAME: "Product Release Bot"
           SLACK_WEBHOOK: "${{ secrets.SLACK_NOTIFICATION }}"
