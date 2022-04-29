@@ -3,5 +3,9 @@
   "version": "0.0.1",
   "devDependencies": {
     "semantic-release": "^19.0.2"
+  },
+  "dependencies": {
+    "@commitlint/config-conventional": "^16.2.4",
+    "semantic-release-slack-bot": "^3.5.2"
   }
 }

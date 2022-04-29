@@ -5,11 +5,37 @@
     "repositoryUrl": "https://github.com/vmonjaret/actions-tests",
     "plugins": [
         [
-            "@semantic-release/commit-analyzer"
+            "@semantic-release/commit-analyzer",
+            {
+                "preset": "conventionalcommits"
+            }
         ],
         [
-            "@semantic-release/release-notes-generator"
+            "@semantic-release/release-notes-generator",
+            {
+                "preset": "conventionalcommits",
+                "presetConfig": {
+                    "issuePrefixes": [
+                        "SXP",
+                        "PT",
+                        "BB",
+                        "CH"
+                    ],
+                    "issueUrlFormat": "https://coachhub.atlassian.net/browse/{{prefix}}{{id}}"
+                }
+            }
         ],
-        "@semantic-release/github"
+        "@semantic-release/github",
+        [
+            "semantic-release-slack-bot",
+            {
+                "notifyOnSuccess": true,
+                "notifyOnFail": true,
+                "slackWebhook": "https://hooks.slack.com/services/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",
+                "markdownReleaseNotes": true,
+                "packageName": "Package API",
+                "unsafeMaxLength": 0
+            }
+        ]
     ]
 }
