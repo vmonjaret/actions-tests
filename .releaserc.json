@@ -31,7 +31,8 @@
             {
                 "notifyOnSuccess": true,
                 "notifyOnFail": true,
-                "slackWebhook": "https://hooks.slack.com/services/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",
+                "slackWebhook": "https://hooks.slack.com/services/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",
+                "slackToken": "UkcyN0lFfFXF5IJoN4F6rPQ1",
                 "markdownReleaseNotes": true,
                 "packageName": "Package API",
                 "unsafeMaxLength": 0
