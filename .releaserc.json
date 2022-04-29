@@ -33,6 +33,7 @@
                 "notifyOnFail": true,
                 "slackWebhook": "https://hooks.slack.com/services/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",
                 "slackToken": "UkcyN0lFfFXF5IJoN4F6rPQ1",
+                "slackChannel": "général",
                 "markdownReleaseNotes": true,
                 "packageName": "Package API",
                 "unsafeMaxLength": 0
