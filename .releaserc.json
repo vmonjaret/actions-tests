@@ -32,7 +32,7 @@
                 "notifyOnSuccess": true,
                 "notifyOnFail": true,
                 "slackWebhook": "https://hooks.slack.com/services/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",
-                "slackToken": "UkcyN0lFfFXF5IJoN4F6rPQ1",
+                "slackToken": "xapp-1-A03BFJBPBGD-3458638980850-c2cafd5f20b8ac163ab04d4071886642ce56a4852a73831a6a454401d6604aa6",
                 "slackChannel": "general",
                 "markdownReleaseNotes": true,
                 "packageName": "Package API",
