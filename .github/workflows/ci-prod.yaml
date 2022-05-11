@@ -19,6 +19,8 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'refs/heads/${{github.event.workflow_run.head_branch}}'
       - name: Fetch GIT history
         run: git fetch --prune --unshallow
       - name: Push images
