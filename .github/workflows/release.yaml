@@ -8,7 +8,7 @@ on:
 
 jobs:
   release:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     name: Release
     runs-on: ubuntu-20.04
     steps:
