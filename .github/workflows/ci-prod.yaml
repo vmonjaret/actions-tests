@@ -2,7 +2,7 @@ name: Hello world
 
 on:
   workflow_dispatch:
-    
+
   workflow_run:
     workflows:
       - release
@@ -18,9 +18,8 @@ env:
 jobs:
   build-publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event == 'workflow_dispatch' || (github.event == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-
       - name: test
         run: |
           echo "hello world"
