@@ -1,13 +1,15 @@
-name: CI Production
+name: Hello world
 
 on:
+  workflow_dispatch:
+    
   workflow_run:
     workflows:
       - release
     branches:
       - main
       - master
-    type:
+    types:
       - completed
 
 env:
@@ -16,38 +18,9 @@ env:
 jobs:
   build-publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event == 'workflow_dispatch' || (github.event == 'workflow_run' && github.event.workflow_run.conclusion == 'success')) }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'refs/heads/${{github.event.workflow_run.head_branch}}'
-      - name: Fetch GIT history
-        run: git fetch --prune --unshallow
-      - name: Push images
+
+      - name: test
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          GITREF=$(echo $GITHUB_SHA | sed 's/.*\(.........\)/\1/')
-          echo GITREF=$GITREF
-          VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          echo IMAGE_NAME=$IMAGE_NAME
-      - name: Get Package.json version
-        id: package-version
-        run: |
-          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-          echo ::set-output name=current-version::$PACKAGE_VERSION
-      - name: Get service name
-        id: service-name
-        run: echo "::set-output name=service-name::$(echo ${IMAGE_NAME^})"
-      - name: Notify On Slack for staging
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_FOOTER: ""
-          SLACK_TITLE: ${{ steps.service-name.outputs.service-name }}
-          SLACK_MESSAGE: Deployed ${{ steps.package-version.outputs.current-version}} to staging 🚀
-          SLACK_USERNAME: "Product Release Bot"
-          SLACK_WEBHOOK: "${{ secrets.SLACK_NOTIFICATION }}"
-          MSG_MINIMAL: true
+          echo "hello world"
